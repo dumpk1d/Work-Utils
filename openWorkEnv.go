@@ -1,4 +1,3 @@
-// Да это гига-кринж, и что ?
 package main
 
 import (
@@ -24,9 +23,9 @@ var (
 	cfgFileName = envOrDefault("CFG_FILE_NAME", "wenv.yml")
 )
 
-// Скачивает файл конфига из репозитория
+// Downloads the cfg file from the repo
 func downloadCfgFile() (err error) {
-	// Создание файла
+	// File creation
 	out, err := os.Create(cfgFileName)
 	if err != nil {
 		return err
@@ -40,13 +39,13 @@ func downloadCfgFile() (err error) {
 	}
 	defer out.Close()
 
-	// Проверка ответа
+	// Answer check
 	if resp.StatusCode != http.StatusOK {
 		os.Remove(cfgFileName)
 		return fmt.Errorf("Status: %s", resp.Status)
 	}
 
-	// Запись
+	// Write
 	_, err = io.Copy(out, resp.Body)
 	if err != nil {
 		return err
@@ -54,8 +53,6 @@ func downloadCfgFile() (err error) {
 
 	return nil
 }
-
-// initCfg() { //парсинг ? конфига ( тут начинается мясо))))) )
 
 func main() {
 	_, err := os.Stat(cfgFileName)
