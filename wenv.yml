@@ -1,0 +1,12 @@
+web:
+    monitoring:
+        enable: 0
+        url: test.com
+    tickets:
+        enable: 0
+        url: test.com
+    bill:
+        enable: 0
+        url: test.com
+
+

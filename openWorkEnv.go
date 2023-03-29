@@ -1,4 +1,4 @@
-// Да это гига-кринж, и что ?(Да-да я клоун, ещё не прошёл gotour до конца)
+// Да это гига-кринж, и что ?
 package main
 
 import (
@@ -13,8 +13,8 @@ import (
 // определение ОС
 const GOOS string = runtime.GOOS
 
-const cfgUrl string = "https://raw.githubusercontent.com/dumpk1d/Work-Utils/main/wenv.json"
-const cfgFileName string = "wenv.json"
+const cfgUrl string = "https://raw.githubusercontent.com/dumpk1d/Work-Utils/main/wenv.?"
+const cfgFileName string = "wenv.yml"
 
 // Скачивает файл конфига из репозитория
 func downloadCfgFile() (err error) {
@@ -47,19 +47,20 @@ func downloadCfgFile() (err error) {
 	return nil
 }
 
-//func readCfg() (err error) { //парсинг json конфига ( тут начинается мясо))))) )
+//func readCfg() { //парсинг ? конфига ( тут начинается мясо))))) )
 
 func main() {
 
 	switch checkos := runtime.GOOS; checkos {
 	case "linux":
 		if _, err := os.Stat(cfgFileName); err == nil { // Если файл на месте
-			fmt.Println("Ok")
+			fmt.Println(string("\033[32m"), "Ok")
+			fmt.Println()
 		} else if errors.Is(err, os.ErrNotExist) { // Если файл не нужен
 			if err = downloadCfgFile(); err == nil { // Проверка есть ли ошибка
-				fmt.Println("Done")
+				fmt.Println(string("\033[32m"), "Done")
 			} else {
-				fmt.Println(err)
+				fmt.Println(string("\033[31m"), err)
 			}
 		}
 
