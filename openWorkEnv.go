@@ -10,10 +10,8 @@ import (
 	"runtime"
 )
 
-// определение ОС
-const GOOS string = runtime.GOOS
-
-const cfgUrl string = "https://raw.githubusercontent.com/dumpk1d/Work-Utils/main/wenv.?"
+// определяет ОС
+const cfgUrl string = "https://raw.githubusercontent.com/dumpk1d/Work-Utils/main/wenv.yml"
 const cfgFileName string = "wenv.yml"
 
 // Скачивает файл конфига из репозитория
@@ -47,21 +45,20 @@ func downloadCfgFile() (err error) {
 	return nil
 }
 
-//func readCfg() { //парсинг ? конфига ( тут начинается мясо))))) )
+// initCfg() { //парсинг ? конфига ( тут начинается мясо))))) )
 
 func main() {
 
-	switch checkos := runtime.GOOS; checkos {
+	switch runtime.GOOS {
 	case "linux":
 		if _, err := os.Stat(cfgFileName); err == nil { // Если файл на месте
 			fmt.Println(string("\033[32m"), "Ok")
 			fmt.Println()
-		} else if errors.Is(err, os.ErrNotExist) { // Если файл не нужен
-			if err = downloadCfgFile(); err == nil { // Проверка есть ли ошибка
+		} else if errors.Is(err, os.ErrNotExist) { // Если файл не на месте
+			if err = downloadCfgFile(); err == nil {
 				fmt.Println(string("\033[32m"), "Done")
-			} else {
-				fmt.Println(string("\033[31m"), err)
 			}
+			fmt.Println(string("\033[31m"), err)
 		}
 
 	case "windows":
