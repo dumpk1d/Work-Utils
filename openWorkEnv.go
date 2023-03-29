@@ -10,18 +10,22 @@ import (
 	"runtime"
 )
 
-const GOOS = runtime.GOOS
+// определение ОС
+const GOOS string = runtime.GOOS
+const cfgUrl string = "https://raw.githubusercontent.com/dumpk1d/Work-Utils/main/wenv.json"
+const cfgFileName string = "wenv.json"
 
+// Скачивает файл конфига из репозитория
 func downloadCfgFile() (err error) {
 	//Create
-	out, err := os.Create("wenv.json")
+	out, err := os.Create(cfgFileName)
 	if err != nil {
 		return err
 	}
 	defer out.Close()
 
 	//Get
-	resp, err := http.Get("https://raw.githubusercontent.com/dumpk1d/Work-Utils/main/wenv.json")
+	resp, err := http.Get(cfgUrl)
 	if err != nil {
 		return err
 	}
@@ -42,12 +46,19 @@ func downloadCfgFile() (err error) {
 }
 
 func main() {
+
 	switch checkos := runtime.GOOS; checkos {
 	case "linux":
-		if _, err := os.Stat("wenv.json"); err == nil {
+		if _, err := os.Stat(cfgFileName); err == nil {
 			fmt.Println("Ok")
 		} else if errors.Is(err, os.ErrNotExist) {
-			fmt.Println(downloadCfgFile())
+			var code = downloadCfgFile()
+			if code == nil {
+				fmt.Println("Ok")
+			} else {
+				os.Remove(cfgFileName)
+				fmt.Println(code)
+			}
 		}
 	case "windows":
 		fmt.Println("404 Error")
