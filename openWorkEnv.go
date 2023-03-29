@@ -47,16 +47,16 @@ func downloadCfgFile() (err error) {
 	return nil
 }
 
-// func readCfg() (err error) {
+//func readCfg() (err error) { //парсинг json конфига ( тут начинается мясо))))) )
 
 func main() {
 
 	switch checkos := runtime.GOOS; checkos {
 	case "linux":
-		if _, err := os.Stat(cfgFileName); err == nil {
+		if _, err := os.Stat(cfgFileName); err == nil { // Если файл на месте
 			fmt.Println("Ok")
-		} else if errors.Is(err, os.ErrNotExist) {
-			if err := downloadCfgFile(); err == nil {
+		} else if errors.Is(err, os.ErrNotExist) { // Если файл не нужен
+			if err = downloadCfgFile(); err == nil { // Проверка есть ли ошибка
 				fmt.Println("Done")
 			} else {
 				fmt.Println(err)
