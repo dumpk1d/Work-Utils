@@ -9,6 +9,12 @@ import (
 	"os"
 )
 
+const (
+	colorReset = "\033[0m"
+	colorRed   = "\033[31m"
+	colorGreen = "\033[32m"
+)
+
 func envOrDefault(key, def string) string {
 	val, exists := os.LookupEnv(key)
 	if !exists {
@@ -54,6 +60,10 @@ func downloadCfgFile() (err error) {
 	return nil
 }
 
+func initCfg() {
+
+}
+
 func main() {
 	_, err := os.Stat(cfgFileName)
 	if err != nil {
@@ -67,5 +77,5 @@ func main() {
 		}
 	}
 
-	fmt.Println(string("\033[32m"), "Ok")
+	fmt.Println(string(colorGreen), "Ok", string(colorReset))
 }
