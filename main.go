@@ -52,7 +52,7 @@ func GetAllVmsList() (arg []string, status uint8) {
 }
 
 func GetBackupVmList() (arg []string, status uint8) {
-	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" | tr -d '.}\"' | sed -e 's|.*VMs:||' -e 's/^.//;s/.$//' "
+	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" | tr -d '.}\"' | sed -e 's|.*VMs:||' -e 's/'\"'\"'//' "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 
