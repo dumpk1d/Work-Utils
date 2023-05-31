@@ -44,6 +44,7 @@ func GetAllVmsList() (arg []string, status uint8) {
 	out, err := exec.Command("bash", "-c", cmd).Output()
 
 	if err != nil {
+		fmt.Println("Error")
 		return []string{err.Error()}, unknow
 	} else {
 		var output = string(out)
@@ -57,12 +58,13 @@ func GetAllVmsList() (arg []string, status uint8) {
 }
 
 func GetBackupVmList() (arg []string, status uint8) {
-	var cmd = "cat borg-agent.log | grep \"Created tasks for backup Node\" | sed -e 's|.*VMs:||' | tr -d '}.\"\'' "
+	var cmd = "cat borg-agent.log | grep \"Created tasks for backup Node\" | sed -e 's|.*VMs:||' | tr -d '.}\"' "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
+		
 		return []string{err.Error()}, unknow
 	} else {
-		println(string(out))
+		fmt.Println(string(out))
 		return []string{" "}, ok
 	}
 }
