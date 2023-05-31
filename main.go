@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os/exec"
 	"strings"
-	"time"
 )
 
 const (
@@ -15,12 +14,6 @@ const (
 	critical uint8  = 3
 	path     string = "borg-agent.log"
 )
-
-type logStruct struct {
-	Level   string    `json:"level"`
-	Time    time.Time `json:"time"`
-	Message string    `json:"message"`
-}
 
 func main() {
 
@@ -59,7 +52,7 @@ func GetAllVmsList() (arg []string, status uint8) {
 }
 
 func GetBackupVmList() (arg []string, status uint8) {
-	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" | tr -d '.}\"' | sed -e 's|.*VMs:||' -e 's/^.//' -e 's/.$//' "
+	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" | tr -d '.}\"' | sed -e 's|.*VMs:||' -e 's/^.//;s/.$//' "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 
