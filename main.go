@@ -14,7 +14,6 @@ const (
 	critical uint8 = 3
 )
 
-
 func main() {
 
 	var (
@@ -26,27 +25,27 @@ func main() {
 	flag.IntVar(&stime, "s", 0, "The second date")
 	flag.Parse()
 
-	fmt.Println("First arg:",ftime,"\n","Second arg",stime)
-	vms,status := GetAllVmsList()
-	fmt.Println("VM'S:",vms,"\n","status",status)
+	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
+	vms, status := GetAllVmsList()
+	fmt.Println("VM'S:", vms, "\n", "status", status)
 }
 
-func GetAllVmsList()(mass []string,status uint8){
+func GetAllVmsList() (mass []string, status uint8) {
 
 	var cmd = "virsh -c qemu:///system list --all | grep one | awk '{print $2}'"
-	out,err := exec.Command("bash","-c",cmd).Output()
+	out, err := exec.Command("bash", "-c", cmd).Output()
 
 	if err != nil {
-		return []string{" "},unknow
-	}else {
+		return []string{" "}, unknow
+	} else {
 		var output = string(out)
-		if (output == " "){
-			return []string{"lol"},ok
-		}else {
+		if output == " " {
+			return []string{"lol"}, ok
+		} else {
 			arr := strings.Split(output, "\n")
-			return arr,ok
+			return arr, ok
 		}
-	}	
+	}
 }
 
 func GetBackupList() {
