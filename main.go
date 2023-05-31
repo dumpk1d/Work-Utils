@@ -1,11 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
-	"os"
 	"os/exec"
 	"strings"
 	"time"
@@ -66,16 +63,12 @@ func GetAllVmsList() (arg []string, status uint8) {
 }
 
 func GetBackupVmList() (arg []string, status uint8) {
-	jsonFile, err := os.Open("borg-agent.log")
+	var cmd = "cat borg-agent.log | grep Created tasks for backup Node"
+	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
-		fmt.Println(err)
 		return []string{err.Error()}, unknow
 	} else {
-		byteValue, _ := ioutil.ReadAll(jsonFile)
-		var data logstruct
-		json.Unmarshal(byteValue, &data)
-		fmt.Println(data)
-		return []string{" "}, ok
+		println(out)
 	}
 }
 
