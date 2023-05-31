@@ -44,6 +44,7 @@ func main() {
 	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
 	vms, status := GetAllVmsList()
 	fmt.Println("VM'S:", vms, "\n", "status", status)
+	GetBackupVmList()
 }
 
 func GetAllVmsList() (arg []string, status uint8) {
