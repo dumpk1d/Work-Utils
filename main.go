@@ -48,7 +48,7 @@ func GetAllVmsList() (mass []string, status uint8) {
 	}
 }
 
-func GetBackupList() {
+func GetBackupVmList() {
 
 }
 
