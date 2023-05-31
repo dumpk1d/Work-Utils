@@ -15,16 +15,10 @@ const (
 	critical uint8 = 3
 )
 
-type logstruct struct {
-	Level    string    `json:"level"`
-	Func     string    `json:"func"`
-	Point    string    `json:"point"`
-	Task     string    `json:"task"`
-	Command  string    `json:"command"`
-	IsSystem bool      `json:"is_system"`
-	Vmid     int       `json:"vmid"`
-	Time     time.Time `json:"time"`
-	Message  string    `json:"message"`
+type logStruct struct {
+	Level   string    `json:"level"`
+	Time    time.Time `json:"time"`
+	Message string    `json:"message"`
 }
 
 func main() {
@@ -63,7 +57,7 @@ func GetAllVmsList() (arg []string, status uint8) {
 }
 
 func GetBackupVmList() (arg []string, status uint8) {
-	var cmd = "cat borg-agent.log | grep \"Created tasks for backup Node\""
+	var cmd = "cat borg-agent.log | grep \"Created tasks for backup Node\" | sed -e 's|.*VMs:||' | tr -d '}.\"\'' "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 		return []string{err.Error()}, unknow
