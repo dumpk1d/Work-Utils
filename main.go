@@ -63,7 +63,7 @@ func GetAllVmsList() (arg []string, status uint8) {
 }
 
 func GetBackupVmList() (arg []string, status uint8) {
-	var cmd = "cat borg-agent.log | grep Created tasks for backup Node"
+	var cmd = "cat borg-agent.log | grep \"Created tasks for backup Node\""
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 		return []string{err.Error()}, unknow
