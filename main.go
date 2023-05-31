@@ -9,10 +9,11 @@ import (
 )
 
 const (
-	unknow   uint8 = 0
-	ok       uint8 = 1
-	warning  uint8 = 2
-	critical uint8 = 3
+	unknow   uint8  = 0
+	ok       uint8  = 1
+	warning  uint8  = 2
+	critical uint8  = 3
+	path     string = "borg-agent.log"
 )
 
 type logStruct struct {
@@ -58,10 +59,10 @@ func GetAllVmsList() (arg []string, status uint8) {
 }
 
 func GetBackupVmList() (arg []string, status uint8) {
-	var cmd = "cat borg-agent.log | grep \"Created tasks for backup Node\" | sed -e 's|.*VMs:||' | tr -d '.}\"' "
+	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" | tr -d '.}\"' | sed -e 's|.*VMs:||' -e 's/^.//' -e 's/.$//' "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
-		
+
 		return []string{err.Error()}, unknow
 	} else {
 		fmt.Println(string(out))
