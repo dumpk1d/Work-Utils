@@ -69,6 +69,7 @@ func GetBackupVmList() (arg []string, status uint8) {
 		return []string{err.Error()}, unknow
 	} else {
 		println(out)
+		return []string{" "}, ok
 	}
 }
 
