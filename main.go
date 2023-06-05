@@ -15,23 +15,6 @@ const (
 	path     string = "borg-agent.log"
 )
 
-func main() {
-
-	var (
-		ftime int
-		stime int
-	)
-
-	flag.IntVar(&ftime, "f", 0, "The first date")
-	flag.IntVar(&stime, "s", 0, "The second date")
-	flag.Parse()
-
-	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
-	vms, status := GetAllVmsList()
-	fmt.Println("VM'S:", vms, "\n", "status", status)
-	GetBackupVmList()
-}
-
 func GetAllVmsList() (arg []string, status uint8) {
 
 	var cmd = "virsh -c qemu:///system list --all | grep one | awk '{print $2}'"
@@ -52,7 +35,7 @@ func GetAllVmsList() (arg []string, status uint8) {
 }
 
 func GetBackupVmList() (arg []string, status uint8) {
-	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" | tr -d '.}\"' | sed -e 's|.*VMs:||' -e 's/'\"'\"'//' "
+	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" | tr -d '.}\"' | sed -e 's|.*VMs:||'"
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 
@@ -65,4 +48,21 @@ func GetBackupVmList() (arg []string, status uint8) {
 
 func GetBaclkilstVmList() {
 
+}
+
+func main() {
+
+	var (
+		ftime int
+		stime int
+	)
+
+	flag.IntVar(&ftime, "f", 0, "The first date")
+	flag.IntVar(&stime, "s", 0, "The second date")
+	flag.Parse()
+
+	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
+	vms, status := GetAllVmsList()
+	fmt.Println("VM'S:", vms, "\n", "status", status)
+	GetBackupVmList()
 }
