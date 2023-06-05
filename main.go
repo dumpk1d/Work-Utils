@@ -3,15 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"os/exec"
 	"strings"
 )
 
 const (
-	unknow   uint8  = 0
-	ok       uint8  = 1
-	warning  uint8  = 2
-	critical uint8  = 3
+	ok       uint8  = 0
+	warning  uint8  = 1
+	critical uint8  = 2
+	unknow   uint8  = 3
 	path     string = "borg-agent.log"
 )
 
@@ -48,6 +49,20 @@ func GetBackupVmList() (arg []string, status uint8) {
 
 func GetBaclkilstVmList() {
 
+}
+
+func NagiosResult(status uint8) {
+	switch status {
+	case ok:
+		fmt.Printf("OK")
+		os.Exit(ok)
+	case warning:
+		fmt.Printf("Warning")
+		os.Exit(warning)
+	case critical:
+		fmt.Printf("Critical")
+		os.Exit(critical)
+	case	
 }
 
 func main() {
