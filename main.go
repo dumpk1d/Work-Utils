@@ -43,7 +43,7 @@ func GetAllVmsList() (arg []string) {
 }
 
 func GetBackupVmList() (arg []string) {
-	var storeVar []byte
+	var storeVar []string
 	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
