@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 const (
@@ -20,6 +21,12 @@ const (
 type listvms struct {
 	time string
 	list []string
+}
+
+type jstruct struct {
+	Level   string    `json:"level"`
+	Time    time.Time `json:"time"`
+	Message string    `json:"message"`
 }
 
 func GetAllVmsList() (arg []string) {
@@ -43,7 +50,7 @@ func GetAllVmsList() (arg []string) {
 }
 
 func GetBackupVmList() (arg []string) {
-	var storeVar []string
+	var storeVar jstruct
 	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
