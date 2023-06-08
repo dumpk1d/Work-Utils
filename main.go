@@ -9,20 +9,21 @@ import (
 )
 
 const (
-	ok       uint8  = 0
-	warning  uint8  = 1
-	critical uint8  = 2
-	unknow   uint8  = 3
+	ok       int    = 0
+	warning  int    = 1
+	critical int    = 2
+	unknow   int    = 3
 	path     string = "borg-agent.log"
 )
 
-func GetAllVmsList() (arg []string, status uint8) {
+func GetAllVmsList() (arg []string, status int) {
 
 	var cmd = "virsh -c qemu:///system list --all | grep one | awk '{print $2}'"
 	out, err := exec.Command("bash", "-c", cmd).Output()
 
 	if err != nil {
 		fmt.Println("Error")
+		os.Exit(101)
 		return []string{err.Error()}, unknow
 	} else {
 		var output = string(out)
@@ -35,11 +36,11 @@ func GetAllVmsList() (arg []string, status uint8) {
 	}
 }
 
-func GetBackupVmList() (arg []string, status uint8) {
+func GetBackupVmList() (arg []string, status int) {
 	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" | tr -d '.}\"' | sed -e 's|.*VMs:||'"
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
-
+		os.Exit(102)
 		return []string{err.Error()}, unknow
 	} else {
 		fmt.Println(string(out))
@@ -51,7 +52,7 @@ func GetBaclkilstVmList() {
 
 }
 
-func NagiosResult(status uint8) {
+func NagiosResult(status int, errorCode uint8) {
 	switch status {
 	case ok:
 		fmt.Printf("OK")
@@ -62,7 +63,17 @@ func NagiosResult(status uint8) {
 	case critical:
 		fmt.Printf("Critical")
 		os.Exit(critical)
-	case	
+	case unknow:
+		ErrorCodeReturn(errorCode)
+	}
+}
+
+func ErrorCodeReturn(errorCode uint8) {
+	switch errorCode {
+	case 101:
+		fmt.Println("Clown")
+		os.Exit(int(unknow))
+	}
 }
 
 func main() {
