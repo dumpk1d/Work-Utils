@@ -18,7 +18,7 @@ const (
 
 func GetAllVmsList() (arg []string, status int) {
 
-	var cmd = "virsh -c qemu:///system list --all | grep one | awk '{print $2}'"
+	var cmd = "virsh -c qemu:///system list --all | grep one | awk '{print $1}'"
 	out, err := exec.Command("bash", "-c", cmd).Output()
 
 	if err != nil {
@@ -37,7 +37,7 @@ func GetAllVmsList() (arg []string, status int) {
 }
 
 func GetBackupVmList() (arg []string, status int) {
-	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" | tr -d '.}\"' | sed -e 's|.*VMs:||'"
+	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 		os.Exit(102)
@@ -63,16 +63,6 @@ func NagiosResult(status int, errorCode uint8) {
 	case critical:
 		fmt.Printf("Critical")
 		os.Exit(critical)
-	case unknow:
-		ErrorCodeReturn(errorCode)
-	}
-}
-
-func ErrorCodeReturn(errorCode uint8) {
-	switch errorCode {
-	case 101:
-		fmt.Println("Clown")
-		os.Exit(int(unknow))
 	}
 }
 
