@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -16,35 +17,41 @@ const (
 	path     string = "borg-agent.log"
 )
 
-func GetAllVmsList() (arg []string, status int) {
+type listvms struct {
+	time string
+	list []string
+}
+
+func GetAllVmsList() (arg []string) {
 
 	var cmd = "virsh -c qemu:///system list --all | grep one | awk '{print $1}'"
 	out, err := exec.Command("bash", "-c", cmd).Output()
 
 	if err != nil {
-		fmt.Println("Error")
-		os.Exit(101)
-		return []string{err.Error()}, unknow
+		fmt.Println("Error qemu")
+		os.Exit(unknow)
 	} else {
 		var output = string(out)
 		if output == " " {
-			return []string{"lol"}, ok
+			return []string{"lol"}
 		} else {
 			arr := strings.Split(output, "\n")
-			return arr, ok
+			return arr
 		}
 	}
 }
 
-func GetBackupVmList() (arg []string, status int) {
+func GetBackupVmList() (arg []string) {
+	var storeVar []byte
 	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
-		os.Exit(102)
-		return []string{err.Error()}, unknow
+		println("File doesn't exist	")
+		os.Exit(unknow)
 	} else {
-		fmt.Println(string(out))
-		return []string{" "}, ok
+		json.Unmarshal([]byte(out), &storeVar)
+		fmt.Println(string(storeVar))
+		return []string{" "}
 	}
 }
 
@@ -66,6 +73,10 @@ func NagiosResult(status int, errorCode uint8) {
 	}
 }
 
+func ErroCheck() {
+	ч
+}
+
 func main() {
 
 	var (
@@ -78,7 +89,7 @@ func main() {
 	flag.Parse()
 
 	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
-	vms, status := GetAllVmsList()
-	fmt.Println("VM'S:", vms, "\n", "status", status)
+	vms := GetAllVmsList()
+	fmt.Println("VM'S:", vms, "\n", "status")
 	GetBackupVmList()
 }
