@@ -52,7 +52,7 @@ func GetBackupVmList() (arg []string) {
 		return []string{" "}
 	} else {
 		json.Unmarshal([]byte(out), &storeVar)
-		fmt.Println(string(storeVar))
+		fmt.Println(storeVar)
 		return []string{" "}
 	}
 }
