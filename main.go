@@ -30,6 +30,7 @@ func GetAllVmsList() (arg []string) {
 	if err != nil {
 		fmt.Println("Error qemu")
 		os.Exit(unknow)
+		return []string{" "}
 	} else {
 		var output = string(out)
 		if output == " " {
@@ -48,6 +49,7 @@ func GetBackupVmList() (arg []string) {
 	if err != nil {
 		println("File doesn't exist	")
 		os.Exit(unknow)
+		return []string{" "}
 	} else {
 		json.Unmarshal([]byte(out), &storeVar)
 		fmt.Println(string(storeVar))
@@ -74,7 +76,7 @@ func NagiosResult(status int, errorCode uint8) {
 }
 
 func ErroCheck() {
-	ч
+
 }
 
 func main() {
