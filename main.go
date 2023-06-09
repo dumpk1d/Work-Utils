@@ -72,12 +72,13 @@ func GetParseJson(str string) (arg []jstruct) {
 }
 
 func GetVmList(array jstruct) []string {
-	var stres = strings.SplitAfter(string(array.Message), "'")
+	var stres = strings.TrimPrefix(string(array.Message),"'")
 
 	if len(stres) == 1 {
 		return []string{" "}
 	}
 	fmt.Println(stres)
+	return []string{" "}
 }
 
 func NagiosResult(status int) {
@@ -105,9 +106,9 @@ func main() {
 	flag.IntVar(&stime, "s", 0, "The second date")
 	flag.Parse()
 
-	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
+	fmt.Println("First arg:", ftime,"\n", "Second arg", stime)
 	vms := GetAllVmsList()
-	fmt.Println("VM'S:", vms, "\n", "status")
+	fmt.Println("VM'S:", vms)
 	taskVms := GetParseJson("Created tasks for backup Node")
-	fmt.Println(taskVms[0].Message)
+	GetVmList(taskVms[0])
 }
