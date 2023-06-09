@@ -1,5 +1,6 @@
 package main
 
+// Да простит меня бог
 import (
 	"encoding/json"
 	"flag"
@@ -18,6 +19,7 @@ const (
 	path     string = "borg-agent.log"
 )
 
+// Структура для хранения распашенной JSON
 type jstruct struct {
 	Level   string    `json:"level"`
 	Time    time.Time `json:"time"`
@@ -69,8 +71,14 @@ func GetParseJson(str string) (arg []jstruct) {
 	}
 }
 
-//func GetVmList(array jstruct) []string {
-//}
+func GetVmList(array jstruct) []string {
+	var stres = strings.SplitAfter(string(array.Message), "'")
+
+	if len(stres) == 1 {
+		return []string{" "}
+	}
+	fmt.Println(stres)
+}
 
 func NagiosResult(status int) {
 	switch status {
@@ -101,5 +109,5 @@ func main() {
 	vms := GetAllVmsList()
 	fmt.Println("VM'S:", vms, "\n", "status")
 	taskVms := GetParseJson("Created tasks for backup Node")
-	fmt.Println(taskVms)
+	fmt.Println(taskVms[0].Message)
 }
