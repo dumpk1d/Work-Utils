@@ -16,7 +16,7 @@ const (
 	warning  int    = 1
 	critical int    = 2
 	unknow   int    = 3
-	path     string = "borg-agent.log"
+	path     string = "file.log"
 )
 
 // Структура для хранения распаршенной JSON
@@ -74,13 +74,16 @@ func GetVmList(array jstruct) []string {
 	// Да-да, я тут подустал. Но какой же красивый костыль!
 	var cmd = "echo " + string(array.Message) + "| sed 's|.*:||'" + "| tr -d \".\""
 	out, _ := exec.Command("bash", "-c", cmd).Output()
-	if string(out) == ""{
+	if string(out) == "" {
 		return []string{" "}
 	} else {
-	arr := strings.Split(string(out), ",")
-	return arr
+		arr := strings.Split(string(out), ",")
+		return arr
+	}
 }
-}
+
+//func GetArrayDiffs(blacklistVms ,taskVms,AllVmsList){
+//}
 
 func NagiosResult(status int) {
 	switch status {
@@ -107,6 +110,7 @@ func main() {
 	flag.IntVar(&stime, "s", 0, "The second date")
 	flag.Parse()
 
+	//test outputs
 	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
 	vms := GetAllVmsList()
 	fmt.Println("VM'S:", vms)
@@ -114,4 +118,3 @@ func main() {
 	//blacklistVms := GetParseJson("Blacklisted vm")
 	GetVmList(taskVms[0])
 }
-
