@@ -71,9 +71,11 @@ func GetParseJson(str string) (arg []jstruct) {
 }
 
 func GetVmList(array jstruct) []string {
+	// Да-да, я тут подустал. Но какой же красивый костыль!
 	var cmd = "echo " + string(array.Message) + "| sed 's|.*:||'" + "| tr -d \".\""
 	out, _ := exec.Command("bash", "-c", cmd).Output()
-	fmt.Println(string(out))
+	arr := strings.Split(string(out), ",")
+	fmt.Println(arr[1])
 	return []string{" "}
 }
 
