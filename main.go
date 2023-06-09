@@ -18,11 +18,6 @@ const (
 	path     string = "borg-agent.log"
 )
 
-type listvms struct {
-	time string
-	list []string
-}
-
 type jstruct struct {
 	Level   string    `json:"level"`
 	Time    time.Time `json:"time"`
@@ -49,17 +44,17 @@ func GetAllVmsList() (arg []string) {
 	}
 }
 
-func GetBackupVmList() (arg []string) {
+func GetParseJson(str string) (arg []jstruct) {
 	var (
 		storeVar []jstruct
 		tmpVar   jstruct
 	)
-	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" "
+	var cmd = "cat " + path + " | grep \""+str+"\" "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 		fmt.Println("File doesn't exist")
 		os.Exit(unknow)
-		return []string{" "}
+		return storeVar
 	} else {
 		arr := strings.Split(string(out), "\n")
 		for _, b := range arr {
@@ -68,13 +63,8 @@ func GetBackupVmList() (arg []string) {
 				storeVar = append(storeVar, tmpVar)
 			}
 		}
-		fmt.Println(storeVar)
-		return []string{" "}
+		return storeVar
 	}
-}
-
-func GetBaclkilstVmList() {
-
 }
 
 func NagiosResult(status int, errorCode uint8) {
@@ -91,10 +81,6 @@ func NagiosResult(status int, errorCode uint8) {
 	}
 }
 
-func ErroCheck() {
-
-}
-
 func main() {
 
 	var (
@@ -109,5 +95,6 @@ func main() {
 	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
 	vms := GetAllVmsList()
 	fmt.Println("VM'S:", vms, "\n", "status")
-	GetBackupVmList()
+	taskVms := GetParseJson("Created tasks for backup Node")
+	fmt.Println(taskVms)
 }
