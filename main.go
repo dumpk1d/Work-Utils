@@ -69,11 +69,10 @@ func GetParseJson(str string) (arg []jstruct) {
 	}
 }
 
-func GetVmList(jstruct array) ({
+//func GetVmList(array jstruct) []string {
+//}
 
-}
-
-func NagiosResult(status int, errorCode uint8) {
+func NagiosResult(status int) {
 	switch status {
 	case ok:
 		fmt.Printf("OK")
