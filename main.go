@@ -29,7 +29,6 @@ type jstruct struct {
 	Message string    `json:"message"`
 }
 
-
 func GetAllVmsList() (arg []string) {
 
 	var cmd = "virsh -c qemu:///system list --all | grep one | awk '{print $1}'"
@@ -53,7 +52,7 @@ func GetAllVmsList() (arg []string) {
 func GetBackupVmList() (arg []string) {
 	var (
 		storeVar []jstruct
-		tmpVar jstruct
+		tmpVar   jstruct
 	)
 	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" "
 	out, err := exec.Command("bash", "-c", cmd).Output()
@@ -62,12 +61,12 @@ func GetBackupVmList() (arg []string) {
 		os.Exit(unknow)
 		return []string{" "}
 	} else {
-		arr := strings.Split(string(out),"\n")
-		for _,b:= range arr {
+		arr := strings.Split(string(out), "\n")
+		for _, b := range arr {
 			if b != "" {
-			json.Unmarshal([]byte(b), &tmpVar)
-			storeVar = append(storeVar,tmpVar)
-		}
+				json.Unmarshal([]byte(b), &tmpVar)
+				storeVar = append(storeVar, tmpVar)
+			}
 		}
 		fmt.Println(storeVar)
 		return []string{" "}
@@ -112,4 +111,3 @@ func main() {
 	fmt.Println("VM'S:", vms, "\n", "status")
 	GetBackupVmList()
 }
-
