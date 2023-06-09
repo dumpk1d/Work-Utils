@@ -53,6 +53,7 @@ func GetBackupVmList() (arg []string) {
 	var storeVar jstruct
 	var cmd = "cat " + path + " | grep \"Created tasks for backup Node\" "
 	out, err := exec.Command("bash", "-c", cmd).Output()
+	fmt.Println(out)
 	if err != nil {
 		println("File doesn't exist	")
 		os.Exit(unknow)
