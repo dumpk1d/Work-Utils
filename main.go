@@ -36,7 +36,9 @@ func GetAllVmsList() (arg []string) {
 	} else {
 		var output = string(out)
 		if output == " " {
-			return []string{"lol"}
+			fmt.Println("No virtual machines")
+			os.Exit(ok)
+			return []string{" "}
 		} else {
 			arr := strings.Split(output, "\n")
 			return arr
@@ -49,7 +51,7 @@ func GetParseJson(str string) (arg []jstruct) {
 		storeVar []jstruct
 		tmpVar   jstruct
 	)
-	var cmd = "cat " + path + " | grep \""+str+"\" "
+	var cmd = "cat " + path + " | grep \"" + str + "\" "
 	out, err := exec.Command("bash", "-c", cmd).Output()
 	if err != nil {
 		fmt.Println("File doesn't exist")
@@ -65,6 +67,10 @@ func GetParseJson(str string) (arg []jstruct) {
 		}
 		return storeVar
 	}
+}
+
+func GetVmList(jstruct array) ({
+
 }
 
 func NagiosResult(status int, errorCode uint8) {
