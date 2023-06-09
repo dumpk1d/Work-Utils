@@ -19,7 +19,7 @@ const (
 	path     string = "borg-agent.log"
 )
 
-// Структура для хранения распашенной JSON
+// Структура для хранения распаршенной JSON
 type jstruct struct {
 	Level   string    `json:"level"`
 	Time    time.Time `json:"time"`
@@ -74,9 +74,12 @@ func GetVmList(array jstruct) []string {
 	// Да-да, я тут подустал. Но какой же красивый костыль!
 	var cmd = "echo " + string(array.Message) + "| sed 's|.*:||'" + "| tr -d \".\""
 	out, _ := exec.Command("bash", "-c", cmd).Output()
+	if string(out) == ""{
+		return []string{" "}
+	} else {
 	arr := strings.Split(string(out), ",")
-	fmt.Println(arr[1])
-	return []string{" "}
+	return arr
+}
 }
 
 func NagiosResult(status int) {
@@ -108,6 +111,7 @@ func main() {
 	vms := GetAllVmsList()
 	fmt.Println("VM'S:", vms)
 	taskVms := GetParseJson("Created tasks for backup Node")
+	//blacklistVms := GetParseJson("Blacklisted vm")
 	GetVmList(taskVms[0])
 }
 
