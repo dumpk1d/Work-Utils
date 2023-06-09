@@ -36,13 +36,12 @@ func GetAllVmsList() (arg []string) {
 		os.Exit(unknow)
 		return []string{" "}
 	} else {
-		var output = string(out)
-		if output == " " {
+		if string(out) == " " {
 			fmt.Println("No virtual machines")
 			os.Exit(ok)
 			return []string{" "}
 		} else {
-			arr := strings.Split(output, "\n")
+			arr := strings.Split(string(out), "\n")
 			return arr
 		}
 	}
@@ -72,12 +71,9 @@ func GetParseJson(str string) (arg []jstruct) {
 }
 
 func GetVmList(array jstruct) []string {
-	var stres = strings.TrimPrefix(string(array.Message),"'")
-
-	if len(stres) == 1 {
-		return []string{" "}
-	}
-	fmt.Println(stres)
+	var cmd = "echo " + string(array.Message) + "| sed 's|.*:||'" + "| tr -d \".\""
+	out, _ := exec.Command("bash", "-c", cmd).Output()
+	fmt.Println(string(out))
 	return []string{" "}
 }
 
@@ -106,9 +102,10 @@ func main() {
 	flag.IntVar(&stime, "s", 0, "The second date")
 	flag.Parse()
 
-	fmt.Println("First arg:", ftime,"\n", "Second arg", stime)
+	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
 	vms := GetAllVmsList()
 	fmt.Println("VM'S:", vms)
 	taskVms := GetParseJson("Created tasks for backup Node")
 	GetVmList(taskVms[0])
 }
+
