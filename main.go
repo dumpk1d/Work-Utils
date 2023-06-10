@@ -82,20 +82,32 @@ func GetVmList(array jstruct) []string {
 	}
 }
 
-//func GetArrayDiffs(blacklistVms ,taskVms,AllVmsList){
-//}
+func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []string {
+	var (
+		diff_list []string
+		//result_list []string
+	)
+	if blacklist[0] == " " || taskVms[0] == " " {
+		//НЕ ЗАБЫТЬ УТОЧНИТЬ код возврата
+		fmt.Println("Tasks doesn't exist")
+		os.Exit(1)
+		return []string{" "}
+	} else {
+		for _, b := range blacklist {
+			if b == " " || b == "" {
 
-func NagiosResult(status int) {
-	switch status {
-	case ok:
-		fmt.Printf("OK")
-		os.Exit(ok)
-	case warning:
-		fmt.Printf("Warning")
-		os.Exit(warning)
-	case critical:
-		fmt.Printf("Critical")
-		os.Exit(critical)
+			} else {
+				diff_list = append(diff_list, b)
+			}
+		}
+		for _, b := range taskVms {
+			if b == " " || b == "" {
+
+			} else {
+				diff_list = append(diff_list, b)
+			}
+		}
+		return diff_list
 	}
 }
 
@@ -108,6 +120,7 @@ func main() {
 
 	flag.IntVar(&ftime, "f", 0, "The first date")
 	flag.IntVar(&stime, "s", 0, "The second date")
+
 	flag.Parse()
 
 	//test outputs
@@ -115,6 +128,8 @@ func main() {
 	vms := GetAllVmsList()
 	fmt.Println("VM'S:", vms)
 	taskVms := GetParseJson("Created tasks for backup Node")
-	//blacklistVms := GetParseJson("Blacklisted vm")
-	GetVmList(taskVms[0])
+	blacklistVms := GetParseJson("Blacklisted vm")
+	var vmlist = GetVmList(taskVms[0])
+	var blackvm = GetVmList(blacklistVms[0])
+	fmt.Println(GetArrayDiffs(blackvm, vmlist, vms))
 }
