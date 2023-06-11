@@ -87,7 +87,7 @@ func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []
 		diff_list []string
 		//result_list []string
 	)
-	if blacklist[0] == " " && taskVms[0] == " " {
+	if blacklist[0] == "" && taskVms[0] == "" {
 		//НЕ ЗАБЫТЬ УТОЧНИТЬ код возврата
 		fmt.Println("Tasks doesn't exist")
 		os.Exit(1)
