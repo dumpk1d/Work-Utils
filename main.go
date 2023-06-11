@@ -72,9 +72,9 @@ func GetParseJson(str string) (arg []jstruct) {
 
 func GetVmList(array jstruct) []string {
 	// Да-да, я тут подустал. Но какой же красивый костыль!
-	var cmd = "echo " + string(array.Message) + "| sed 's|.*:||'" + "| tr -d \".\""
+	var cmd = "echo " + string(array.Message) + "| sed 's|.*:||'" + "| tr -d \".\n \""
 	out, _ := exec.Command("bash", "-c", cmd).Output()
-	if string(out) == "" {
+	if string(out) == " \n " {
 		return []string{" "}
 	} else {
 		arr := strings.Split(string(out), ",")
@@ -94,18 +94,10 @@ func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []
 		return []string{" "}
 	} else {
 		for _, b := range blacklist {
-			if b == " " || b == "" {
-
-			} else {
-				diff_list = append(diff_list, b)
-			}
+			diff_list = append(diff_list, b)
 		}
 		for _, b := range taskVms {
-			if b == " " || b == "" {
-
-			} else {
-				diff_list = append(diff_list, b)
-			}
+			diff_list = append(diff_list, b)
 		}
 		return diff_list
 	}
@@ -124,12 +116,14 @@ func main() {
 	flag.Parse()
 
 	//test outputs
-	fmt.Println("First arg:", ftime, "\n", "Second arg", stime)
 	vms := GetAllVmsList()
-	fmt.Println("VM'S:", vms)
 	taskVms := GetParseJson("Created tasks for backup Node")
 	blacklistVms := GetParseJson("Blacklisted vm")
 	var vmlist = GetVmList(taskVms[0])
 	var blackvm = GetVmList(blacklistVms[0])
-	fmt.Println(GetArrayDiffs(blackvm, vmlist, vms))
+	clown := GetArrayDiffs(blackvm, vmlist, vms)
+
+	for a,b := range clown {
+		fmt.Println(a,":",b)
+	}
 }
