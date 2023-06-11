@@ -3,7 +3,6 @@ package main
 // Да простит меня бог
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -25,6 +24,9 @@ type jstruct struct {
 	Time    time.Time `json:"time"`
 	Message string    `json:"message"`
 }
+
+// Пока не понял как и зачем
+//func CheckTime(stime string,ftime string,arg jstruct) (ArgsNum int){
 
 func GetAllVmsList() (arg []string) {
 
@@ -115,22 +117,31 @@ func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []
 }
 
 func main() {
-	var (
-		ftime string
-		stime string
-	)
-	flag.StringVar(&ftime, "f", "1200", "The first date")
-	flag.StringVar(&stime, "s", "1300", "The second date")
-	flag.Parse()
+	//var (
+	//	ftime       string
+	//	stime       string
+	//)
+	//flag.StringVar(&ftime, "f", "23", "The first date")
+	//flag.StringVar(&stime, "s", "09", "The second date")
+	//flag.Parse()
 
 	taskVms := GetParseJson("Created tasks for backup Node")
 	blacklistVms := GetParseJson("Blacklisted vm")
-	var vmlist = GetVmList(taskVms[0])
-	var blackvm = GetVmList(blacklistVms[0])
-
-	clown := GetArrayDiffs(blackvm, vmlist, GetAllVmsList())
-
-	for a, b := range clown {
-		fmt.Println(a, ":", b)
+	if taskVms[0].Time.Day()-1 == time.Now().Day()-1 && taskVms[0].Time.Month() == time.Now().Month() {
+		var vmlist = GetVmList(taskVms[0])
+		var blackvm = GetVmList(blacklistVms[0])
+		resultArg := GetArrayDiffs(blackvm, vmlist, GetAllVmsList())
+		if len(resultArg) != 0 {
+			fmt.Println("VMs without backup tasks founded:")
+			for _, b := range resultArg {
+				fmt.Println(b, "- No Job")
+			}
+			os.Exit(critical)
+		} else {
+			fmt.Println("Ok")
+			os.Exit(OK)
+		}
+	} else {
+		fmt.Println("d")
 	}
 }
