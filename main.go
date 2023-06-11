@@ -30,9 +30,8 @@ type jstruct struct {
 
 func GetAllVmsList() (arg []string) {
 
-	var cmd = "virsh -c qemu:///system list --all | grep one | awk '{print $1}'"
+	var cmd = "virsh -c qemu:///system list --all | grep one | awk '{print $2}' | tr -d one- | tr -d \" \""
 	out, err := exec.Command("bash", "-c", cmd).Output()
-
 	if err != nil {
 		fmt.Println("Error qemu")
 		os.Exit(unknow)
@@ -44,7 +43,7 @@ func GetAllVmsList() (arg []string) {
 			os.Exit(OK)
 			return []string{" "}
 		} else {
-			arr := strings.Split(string(out), "\n")
+			arr := strings.Split(string(out), "\n") // *
 			return arr
 		}
 	}
@@ -119,8 +118,8 @@ func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []
 func main() {
 	// До лучших времён :D
 	//var (
-	//	ftime       string
-	//	stime       string
+	//      ftime       string
+	//      stime       string
 	//)
 	//flag.StringVar(&ftime, "f", "23", "The first date")
 	//flag.StringVar(&stime, "s", "09", "The second date")
@@ -130,11 +129,11 @@ func main() {
 	blacklistVms := GetParseJson("Blacklisted vm")
 
 	if taskVms[0].Time.Day() == yesterday.Day() {
+		var allvms = GetAllVmsList()
 		var vmlist = GetVmList(taskVms[0])
 		var blackvm = GetVmList(blacklistVms[0])
-		resultArg := GetArrayDiffs(blackvm, vmlist, GetAllVmsList())
+		var resultArg = GetArrayDiffs(blackvm, vmlist, allvms)
 		if len(resultArg) != 0 {
-			fmt.Println("VMs without backup tasks founded:")
 			for _, b := range resultArg {
 				fmt.Println(b, "- No Job")
 			}
