@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	ok       int    = 0
+	OK       int    = 0
 	warning  int    = 1
 	critical int    = 2
 	unknow   int    = 3
@@ -37,8 +37,9 @@ func GetAllVmsList() (arg []string) {
 		return []string{" "}
 	} else {
 		if string(out) == " " {
+			//НЕ ЗАБЫТЬ УТОЧНИТЬ код возврата
 			fmt.Println("No virtual machines")
-			os.Exit(ok)
+			os.Exit(OK)
 			return []string{" "}
 		} else {
 			arr := strings.Split(string(out), "\n")
@@ -90,7 +91,7 @@ func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []
 	if blacklist[0] == "" && taskVms[0] == "" {
 		//НЕ ЗАБЫТЬ УТОЧНИТЬ код возврата
 		fmt.Println("Tasks doesn't exist")
-		os.Exit(1)
+		os.Exit(critical)
 		return []string{" "}
 	} else {
 		for _, b := range blacklist {
@@ -99,6 +100,7 @@ func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []
 		for _, b := range taskVms {
 			diff_list = append(diff_list, b)
 		}
+		// Магия которая сравнивает 2 массива
 		m := make(map[string]bool)
 		for _, item := range AllVmsList {
 			m[item] = true
@@ -113,24 +115,20 @@ func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []
 }
 
 func main() {
-
 	var (
-		ftime int
-		stime int
+		ftime string
+		stime string
 	)
-
-	flag.IntVar(&ftime, "f", 0, "The first date")
-	flag.IntVar(&stime, "s", 0, "The second date")
-
+	flag.StringVar(&ftime, "f", "1200", "The first date")
+	flag.StringVar(&stime, "s", "1300", "The second date")
 	flag.Parse()
 
-	//test outputs
-	vms := GetAllVmsList()
 	taskVms := GetParseJson("Created tasks for backup Node")
 	blacklistVms := GetParseJson("Blacklisted vm")
 	var vmlist = GetVmList(taskVms[0])
 	var blackvm = GetVmList(blacklistVms[0])
-	clown := GetArrayDiffs(blackvm, vmlist, vms)
+
+	clown := GetArrayDiffs(blackvm, vmlist, GetAllVmsList())
 
 	for a, b := range clown {
 		fmt.Println(a, ":", b)
