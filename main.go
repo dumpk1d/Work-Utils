@@ -84,8 +84,8 @@ func GetVmList(array jstruct) []string {
 
 func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []string {
 	var (
-		diff_list []string
-		//result_list []string
+		diff_list   []string
+		result_list []string
 	)
 	if blacklist[0] == " " && taskVms[0] == " " {
 		//НЕ ЗАБЫТЬ УТОЧНИТЬ код возврата
@@ -99,7 +99,16 @@ func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []
 		for _, b := range taskVms {
 			diff_list = append(diff_list, b)
 		}
-		return diff_list
+		m := make(map[string]bool)
+		for _, item := range AllVmsList {
+			m[item] = true
+		}
+		for _, item := range diff_list {
+			if _, ok := m[item]; !ok {
+				result_list = append(result_list, item)
+			}
+		}
+		return result_list
 	}
 }
 
@@ -123,7 +132,7 @@ func main() {
 	var blackvm = GetVmList(blacklistVms[0])
 	clown := GetArrayDiffs(blackvm, vmlist, vms)
 
-	for a,b := range clown {
-		fmt.Println(a,":",b)
+	for a, b := range clown {
+		fmt.Println(a, ":", b)
 	}
 }
