@@ -117,6 +117,7 @@ func GetArrayDiffs(blacklist []string, taskVms []string, AllVmsList []string) []
 }
 
 func main() {
+	// До лучших времён :D
 	//var (
 	//	ftime       string
 	//	stime       string
@@ -124,10 +125,11 @@ func main() {
 	//flag.StringVar(&ftime, "f", "23", "The first date")
 	//flag.StringVar(&stime, "s", "09", "The second date")
 	//flag.Parse()
-
+	yesterday := time.Now().AddDate(0, 0, -1)
 	taskVms := GetParseJson("Created tasks for backup Node")
 	blacklistVms := GetParseJson("Blacklisted vm")
-	if taskVms[0].Time.Day()-1 == time.Now().Day()-1 && taskVms[0].Time.Month() == time.Now().Month() {
+
+	if taskVms[0].Time.Day() == yesterday.Day() {
 		var vmlist = GetVmList(taskVms[0])
 		var blackvm = GetVmList(blacklistVms[0])
 		resultArg := GetArrayDiffs(blackvm, vmlist, GetAllVmsList())
@@ -142,6 +144,7 @@ func main() {
 			os.Exit(OK)
 		}
 	} else {
-		fmt.Println("d")
+		fmt.Println("Log line for", yesterday.Day(), yesterday.Month(), "not found")
+		os.Exit(3)
 	}
 }
